@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DecimalFormat;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -223,7 +225,8 @@ public class MainActivity extends AppCompatActivity {
                 default:
                     break;
             }
-            numberOne = result.toString();
+            DecimalFormat decimalFormat = new DecimalFormat("#.########");
+            numberOne = decimalFormat.format(result);
 
             resultLable.setText(numberOne);
             numberTwo = "";

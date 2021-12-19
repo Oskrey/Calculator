@@ -11,7 +11,6 @@
         android:id="@+id/result"
         android:layout_width="match_parent"
         android:layout_height="150sp"
-
         android:textColor="@color/white"
         android:textSize="48sp"
         android:gravity="center_vertical|end"
