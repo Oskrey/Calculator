@@ -224,6 +224,7 @@
             android:background="@color/SpecYellow"
             android:onClick="inputNumber"
             android:text="0"
+            android:tag="0"
             android:textColor="@color/white"
 
             android:textSize="20sp" />

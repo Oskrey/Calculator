@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
     }
 
     String numberOne = "";
@@ -28,31 +29,38 @@ public class MainActivity extends AppCompatActivity {
     boolean lastbt = false;
     boolean plusMinus = false;
     boolean percentUsed = false;
+    boolean zero = false;
 
     Button button;
 
     public void fraction(View view)
-    {
-        TextView result = findViewById(R.id.result);
+    {TextView resultLabel = findViewById(R.id.result);
+
         if(!frac)
         {
             if (operand.isEmpty())
             {
+                if (!numberOne.isEmpty())
                 numberOne += ".";
-                result.setText(numberOne);
+                else
+                numberOne += "0.";
+                resultLabel.setText(numberOne);
             }
             else
             {
-                numberTwo += ".";
-                result.setText(numberTwo);
+                if (!numberTwo.isEmpty())
+                    numberTwo += ".";
+                else
+                    numberTwo += "0.";
+                resultLabel.setText(numberTwo);
             }
             frac = true;
         }
+
     }
     public void inputNumber(View view)
-    {
-        TextView result = findViewById(R.id.result);
-
+    {    TextView resultLabel = findViewById(R.id.result);
+        String text = ((Button) view).getText().toString();
         if (operand.isEmpty())
         {
             if (percentUsed)
@@ -60,9 +68,14 @@ public class MainActivity extends AppCompatActivity {
                 numberOne = "";
                 percentUsed = false;
             }
-            String text = ((Button) view).getText().toString();
             numberOne += text;
-            result.setText(numberOne);
+            resultLabel.setText(numberOne);
+            if (text.equals("0") && numberOne.equals("0"))
+            {
+                numberOne = "";
+                resultLabel.setText("0");
+            }
+
         }
         else
         {
@@ -71,15 +84,18 @@ public class MainActivity extends AppCompatActivity {
                 numberTwo = "";
                 percentUsed = false;
             }
-            String text = ((Button) view).getText().toString();
             numberTwo += text;
-            result.setText(numberTwo);
+            resultLabel.setText(numberTwo);
+            if (text.equals("0") && numberTwo.equals("0"))
+            {
+                numberTwo = "";
+                resultLabel.setText("0");
+            }
         }
     }
 
     public void clearOneAction(View view)
-    {
-        TextView result = findViewById(R.id.result);
+    {    TextView resultLabel = findViewById(R.id.result);
 
         if (operand.isEmpty())
         {
@@ -91,10 +107,11 @@ public class MainActivity extends AppCompatActivity {
                     frac = false;
                 }
                 numberOne = numberOne.substring(0, numberOne.length() - 1);
-                result.setText(numberOne);
+                resultLabel.setText(numberOne);
+                if (numberOne.isEmpty())
+                    resultLabel.setText("0");
+
             }
-            else
-            result.setText("0");
             frac = false;
 
         }
@@ -106,22 +123,22 @@ public class MainActivity extends AppCompatActivity {
                 if (test.equals("."))
                     frac = false;
                 numberTwo =  numberTwo.substring(0, numberTwo.length() - 1);
-                result.setText(numberTwo);
+                resultLabel.setText(numberTwo);
+                if (numberTwo.isEmpty())
+                    resultLabel.setText("0");
             }
-            else
-                result.setText("0");
         }
     }
     public void clearAllAction(View view)
-    {
-        TextView result = findViewById(R.id.result);
+    {    TextView resultLabel = findViewById(R.id.result);
+
         numberOne = "";
         numberTwo = "";
         operand = "";
         frac = false;
         plusMinus = false;
         percentUsed = true;
-        result.setText("0");
+        resultLabel.setText("0");
         if (lastbt)
         {
             button.setBackgroundResource(R.color.SpecOrange);
@@ -130,36 +147,28 @@ public class MainActivity extends AppCompatActivity {
         lastbt = false;
 
     }
-    public void percent(View view)
+    public void percent(View view)//////////////////////////////////////////////////////////////////////тут условие первое
     {
-        TextView result = findViewById(R.id.result);
-        Double resPercent;
-        if (operand.isEmpty())
-        {
-            if (!numberOne.isEmpty())
-            {
-                resPercent = Double.parseDouble(numberOne) / 100;
-                numberOne = resPercent.toString();
-                result.setText(numberOne);
-                percentUsed = true;
-            }
 
-        }
-        else
+        Double resPercent;
+        if(!numberOne.isEmpty() && numberTwo.isEmpty())
         {
-            if (!numberOne.isEmpty())
-            {
-                resPercent = Double.parseDouble(numberTwo) / 100;
-                numberTwo = resPercent.toString();
-                result.setText(numberTwo);
-                percentUsed = true;
-            }
+            resPercent = Double.parseDouble(numberOne) / 100;
+            numberOne = resPercent.toString();
+            inputFine(numberOne);
+            percentUsed = true;
+        }
+        if(!numberOne.isEmpty() && !numberTwo.isEmpty())
+        {
+            resPercent = Double.parseDouble(numberTwo) / 100;
+            numberTwo = resPercent.toString();
+            inputFine(numberTwo);
+            percentUsed = true;
         }
 
     }
     public void inputOperand(View view)
-    {
-
+    {TextView tw = findViewById(R.id.result);
         if(numberTwo.isEmpty() && !numberOne.isEmpty())
         {
             ((Button) view).setBackgroundResource(R.color.white);
@@ -176,35 +185,37 @@ public class MainActivity extends AppCompatActivity {
             lastbt = true;
             button = ((Button) view);
             frac = false;
-
+            inputFine(numberOne);
+            tw.setText("0");
+            Toast.makeText(getApplicationContext(), numberOne + " "+ text, Toast.LENGTH_SHORT).show();
             plusMinus = false;
         }
     }
 
     public void plusOrMinus(View view)
     {
-        TextView result = findViewById(R.id.result);
+
         Double resPlusOrMinus;
-        if (operand.isEmpty())
+        if(!numberOne.isEmpty() && numberTwo.isEmpty())
         {
-            resPlusOrMinus = Double.parseDouble(numberOne) *-1;
+            resPlusOrMinus = Double.parseDouble(numberOne) * -1;
             numberOne = resPlusOrMinus.toString();
-            result.setText(numberOne);
+            inputFine(numberOne);
         }
-        else
+        if(!numberOne.isEmpty() && !numberTwo.isEmpty())
         {
-            resPlusOrMinus = Double.parseDouble(numberTwo) *-1;
+            resPlusOrMinus = Double.parseDouble(numberTwo) * -1;
             numberTwo = resPlusOrMinus.toString();
-            result.setText(numberTwo);
+            inputFine(numberTwo);
         }
     }
 
     public void resultAction(View view)
     {
+
         if(!(numberOne.isEmpty()||numberTwo.isEmpty()||operand.isEmpty()))
         {
             Double result = 0.0;
-            TextView resultLable = findViewById(R.id.result);
 
             switch (operand)
             {
@@ -225,10 +236,10 @@ public class MainActivity extends AppCompatActivity {
                 default:
                     break;
             }
-            DecimalFormat decimalFormat = new DecimalFormat("#.########");
-            numberOne = decimalFormat.format(result);
+            numberOne = result.toString();
+            inputFine(numberOne);
 
-            resultLable.setText(numberOne);
+
             numberTwo = "";
             operand = "";
             frac = false;
@@ -241,6 +252,15 @@ public class MainActivity extends AppCompatActivity {
         {
             Toast.makeText(getApplicationContext(), getString(R.string.error_msg), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public  String inputFine(String str)
+    {
+        TextView resultLabel = findViewById(R.id.result);
+        DecimalFormat decimalFormat = new DecimalFormat("#.##########");
+        str = decimalFormat.format(Double.parseDouble(str));
+        resultLabel.setText(str);
+        return str;
     }
 
 }
