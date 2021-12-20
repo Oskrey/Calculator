@@ -29,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
     boolean lastbt = false;
     boolean plusMinus = false;
     boolean percentUsed = false;
-    boolean zero = false;
 
     Button button;
 
@@ -38,6 +37,12 @@ public class MainActivity extends AppCompatActivity {
 
         if(!frac)
         {
+            if (percentUsed)
+            {
+                numberTwo = "";
+                percentUsed = false;
+                frac = false;
+            }
             if (operand.isEmpty())
             {
                 if (!numberOne.isEmpty())
@@ -155,14 +160,14 @@ public class MainActivity extends AppCompatActivity {
         {
             resPercent = Double.parseDouble(numberOne) / 100;
             numberOne = resPercent.toString();
-            inputFine(numberOne);
+            numberOne = inputFine(numberOne);
             percentUsed = true;
         }
         if(!numberOne.isEmpty() && !numberTwo.isEmpty())
         {
             resPercent = Double.parseDouble(numberTwo) / 100;
             numberTwo = resPercent.toString();
-            inputFine(numberTwo);
+            numberTwo = inputFine(numberTwo);
             percentUsed = true;
         }
 
@@ -185,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
             lastbt = true;
             button = ((Button) view);
             frac = false;
-            inputFine(numberOne);
+            numberOne = inputFine(numberOne);
             tw.setText("0");
             Toast.makeText(getApplicationContext(), numberOne + " "+ text, Toast.LENGTH_SHORT).show();
             plusMinus = false;
@@ -200,13 +205,13 @@ public class MainActivity extends AppCompatActivity {
         {
             resPlusOrMinus = Double.parseDouble(numberOne) * -1;
             numberOne = resPlusOrMinus.toString();
-            inputFine(numberOne);
+            numberOne = inputFine(numberOne);
         }
         if(!numberOne.isEmpty() && !numberTwo.isEmpty())
         {
             resPlusOrMinus = Double.parseDouble(numberTwo) * -1;
             numberTwo = resPlusOrMinus.toString();
-            inputFine(numberTwo);
+            numberTwo =  inputFine(numberTwo);
         }
     }
 
@@ -237,14 +242,13 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
             numberOne = result.toString();
-            inputFine(numberOne);
-
-
+            numberOne = inputFine(numberOne);
             numberTwo = "";
             operand = "";
             frac = false;
             plusMinus = false;
             percentUsed = true;
+            lastbt = false;
             button.setBackgroundResource(R.color.SpecOrange);
             button.setTextColor(Color.rgb(0, 0, 0));
         }
@@ -257,8 +261,9 @@ public class MainActivity extends AppCompatActivity {
     public  String inputFine(String str)
     {
         TextView resultLabel = findViewById(R.id.result);
-        DecimalFormat decimalFormat = new DecimalFormat("#.##########");
+        DecimalFormat decimalFormat = new DecimalFormat("#.###########");
         str = decimalFormat.format(Double.parseDouble(str));
+        str = str.replaceAll(",",".");
         resultLabel.setText(str);
         return str;
     }
