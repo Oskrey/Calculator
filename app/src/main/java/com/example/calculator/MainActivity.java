@@ -152,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
         lastbt = false;
 
     }
-    public void percent(View view)//////////////////////////////////////////////////////////////////////тут условие первое
+    public void percent(View view)
     {
 
         Double resPercent;
